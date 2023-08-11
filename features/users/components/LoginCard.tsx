@@ -32,11 +32,14 @@ export default function LoginCard() {
     },
   })
 
-  function handleSubmit(values: z.infer<typeof schema>) {
+  async function handleSubmit(values: z.infer<typeof schema>) {
     console.log(values)
-    login(values).then((res) => {
+    try {
+      const res = await login(values)
       console.log(res)
-    })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   return (
@@ -52,7 +55,7 @@ export default function LoginCard() {
                   <FormItem>
                     <FormLabel className="p-2">{key}</FormLabel>
                     <FormControl>
-                      <Input {...field} type={key}/>
+                      <Input {...field} type={key} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
