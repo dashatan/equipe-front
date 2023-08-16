@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useLoginMutation } from "../services/user"
+import { useLoginMutation, useRegisterMutation } from "../services/auth"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -18,24 +18,23 @@ import {
 } from "@/components/ui/form"
 
 export const schema = z.object({
+  name: z.string(),
+  userName: z.string().min(8, "username should have at least 8 character"),
   email: z.string().email(),
-  password: z.string().min(4, "username should have at least 4 character"),
+  password: z.string().min(8, "password should have at least 8 character"),
 })
 
-export default function LoginCard() {
-  const [login, result] = useLoginMutation()
+export default function Register() {
+  const [register, result] = useRegisterMutation()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
-      email: "",
-    },
   })
 
   async function handleSubmit(values: z.infer<typeof schema>) {
     console.log(values)
     try {
-      const res = await login(values)
+      const res = await register(values)
       console.log(res)
     } catch (err) {
       console.log(err)
@@ -49,6 +48,7 @@ export default function LoginCard() {
           <CardContent className="flex flex-col gap-4 py-4">
             {Object.keys(schema.shape).map((key: any) => (
               <FormField
+                key={key}
                 control={form.control}
                 name={key}
                 render={({ field }) => (
@@ -64,7 +64,7 @@ export default function LoginCard() {
             ))}
           </CardContent>
           <CardFooter>
-            <Button className="w-20" type="submit">
+            <Button className="w-full mt-8" type="submit" variant="destructive">
               Submit
             </Button>
           </CardFooter>
