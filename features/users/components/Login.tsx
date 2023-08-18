@@ -16,26 +16,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { useToast } from "@/components/ui/use-toast"
+import { useAppDispatch, useAppSelector } from "@/store/store"
+import { authSlice } from "../slices/auth"
+import { SearchSlice } from "@/store/slices"
+import { useRouter } from "next/navigation"
 
 export const schema = z.object({
-  userName: z.string().min(8, "username should have at least 8 character"),
+  email: z.string().email(),
   password: z.string().min(8, "password should have at least 8 character"),
 })
 
 export default function Login() {
   const [login, result] = useLoginMutation()
+  const { toast } = useToast()
+  const dispatch = useAppDispatch()
+  const store = useAppSelector((state) => state)
+  const token = store.auth.token
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
   async function handleSubmit(values: z.infer<typeof schema>) {
-    console.log(values)
     try {
-      const res = await login(values)
-      console.log(res)
-    } catch (err) {
-      console.log(err)
+      const { jwt } = await login(values).unwrap()
+      dispatch(authSlice.actions.token(jwt))
+      router.push("/profile")
+    } catch (err: any) {
+      const message = err?.data?.message
+      toast({ title: message, variant: "error" })
     }
   }
 

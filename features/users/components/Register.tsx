@@ -16,28 +16,29 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
+import { useToast } from "@/components/ui/use-toast"
 
 export const schema = z.object({
   name: z.string(),
-  userName: z.string().min(8, "username should have at least 8 character"),
   email: z.string().email(),
   password: z.string().min(8, "password should have at least 8 character"),
 })
 
 export default function Register() {
   const [register, result] = useRegisterMutation()
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
   async function handleSubmit(values: z.infer<typeof schema>) {
-    console.log(values)
     try {
-      const res = await register(values)
+      const res = await register(values).unwrap()
       console.log(res)
-    } catch (err) {
-      console.log(err)
+    } catch (err: any) {
+      const message = err?.data?.message
+      toast({ title: message, variant:"error" })
     }
   }
 
