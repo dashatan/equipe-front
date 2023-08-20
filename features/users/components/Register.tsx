@@ -34,8 +34,7 @@ export default function Register() {
 
   async function handleSubmit(values: z.infer<typeof schema>) {
     try {
-      const res = await register(values).unwrap()
-      console.log(res)
+      const {jwt} = await register(values).unwrap()
     } catch (err: any) {
       const message = err?.data?.message
       toast({ title: message, variant:"error" })
