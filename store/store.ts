@@ -11,7 +11,10 @@ export const store = configureStore({
     [authSlice.name]: authReducer,
     [SearchSlice.name]: SearchSlice.reducer,
   },
-  middleware: (defMid) => defMid().concat(mainApi.middleware),
+  middleware: (defMid) =>
+    defMid({
+      serializableCheck: { ignoredActions: ["persist/REHYDRATE", "persist/PERSIST"] },
+    }).concat(mainApi.middleware),
 })
 
 setupListeners(store.dispatch)

@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store"
 import { authSlice } from "../slices/auth"
 import { SearchSlice } from "@/store/slices"
 import { useRouter } from "next/navigation"
+import { signIn, signOut } from "next-auth/react"
 
 export const schema = z.object({
   email: z.string().email(),
@@ -34,7 +35,6 @@ export default function Login() {
   const store = useAppSelector((state) => state)
   const token = store.auth.token
   const router = useRouter()
-  
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
