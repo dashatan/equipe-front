@@ -21,7 +21,7 @@ import { useAppDispatch, useAppSelector } from "@/store/store"
 import { authSlice } from "../slices/auth"
 import { SearchSlice } from "@/store/slices"
 import { useRouter } from "next/navigation"
-import { signIn, signOut } from "next-auth/react"
+import { cookies } from "next/headers"
 
 export const schema = z.object({
   email: z.string().email(),
@@ -43,8 +43,19 @@ export default function Login() {
   async function handleSubmit(values: z.infer<typeof schema>) {
     try {
       const { jwt } = await login(values).unwrap()
-      dispatch(authSlice.actions.token(jwt))
-      router.push("/profile")
+      await fetch("/api/auth", {
+        method: "POST",
+        body: JSON.stringify({ jwt }),
+        headers: { "Content-Type": "application/json" },
+      })
+        .then(() => {
+          dispatch(authSlice.actions.token(jwt))
+          router.push("/profile")
+        })
+        .catch((err) => {
+          const message = err?.data?.message
+          toast({ title: message, variant: "error" })
+        })
     } catch (err: any) {
       const message = err?.data?.message
       toast({ title: message, variant: "error" })

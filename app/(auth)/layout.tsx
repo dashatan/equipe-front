@@ -1,10 +1,13 @@
-
 import Image from "next/image"
 import banner from "@/public/banner-white.png"
 import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const cookieStore = cookies()
+  if (cookieStore.get("jwt")?.value) {
+    redirect("/profile")
+  }
 
   return (
     <div className="flex h-screen">
