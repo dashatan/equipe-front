@@ -3,10 +3,8 @@ import { redirect } from "next/navigation"
 import Logout from "@/features/users/components/Logout"
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = cookies()
-  if (!cookieStore.get("jwt")?.value) {
-    redirect("/login")
-  }
+  const authToken = cookies().get("authToken")?.value
+  if (!authToken) redirect("/login")
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">

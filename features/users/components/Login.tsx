@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useLoginMutation } from "../services/auth"
+import { useLoginMutation, useSetTokenMutation } from "../services/auth"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -22,6 +22,8 @@ import { authSlice } from "../slices/auth"
 import { SearchSlice } from "@/store/slices"
 import { useRouter } from "next/navigation"
 import { cookies } from "next/headers"
+import useAuth from "../hooks/useAuth"
+import { Icons } from "@/components/ui/Icons"
 
 export const schema = z.object({
   email: z.string().email(),
@@ -29,37 +31,14 @@ export const schema = z.object({
 })
 
 export default function Login() {
-  const [login, result] = useLoginMutation()
-  const { toast } = useToast()
-  const dispatch = useAppDispatch()
-  const store = useAppSelector((state) => state)
-  const token = store.auth.token
-  const router = useRouter()
+  const { login, loginRes } = useAuth()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
   async function handleSubmit(values: z.infer<typeof schema>) {
-    try {
-      const { jwt } = await login(values).unwrap()
-      await fetch("/api/auth", {
-        method: "POST",
-        body: JSON.stringify({ jwt }),
-        headers: { "Content-Type": "application/json" },
-      })
-        .then(() => {
-          dispatch(authSlice.actions.token(jwt))
-          router.push("/profile")
-        })
-        .catch((err) => {
-          const message = err?.data?.message
-          toast({ title: message, variant: "error" })
-        })
-    } catch (err: any) {
-      const message = err?.data?.message
-      toast({ title: message, variant: "error" })
-    }
+    login(values)
   }
 
   return (
@@ -86,7 +65,11 @@ export default function Login() {
           </CardContent>
           <CardFooter>
             <Button className="w-full" variant="destructive" type="submit">
-              Submit
+              {loginRes.isLoading ? (
+                <Icons.spinner className="animate-spin" />
+              ) : (
+                <span>Submit</span>
+              )}
             </Button>
           </CardFooter>
         </form>

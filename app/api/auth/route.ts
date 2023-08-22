@@ -3,16 +3,15 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(req: NextRequest) {
   const res = await req.json()
-  const jwt = res?.jwt
-  console.log(jwt)
+  const token = res?.token
   const c = cookies()
-  if (jwt) c.set("jwt", jwt)
-  else return NextResponse.error()
-  return NextResponse.json({ message: "cookie set" })
+  if (token) c.set("authToken", token)
+  else return NextResponse.json({ message: "token not found" }, { status: 404 })
+  return NextResponse.json({ message: "token set" })
 }
 
 export async function DELETE() {
   const c = cookies()
-  c.delete("jwt")
-  return NextResponse.json({ message: "cookie removed" })
+  c.delete("authToken")
+  return NextResponse.json({ message: "token removed" })
 }

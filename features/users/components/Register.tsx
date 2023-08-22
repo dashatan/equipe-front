@@ -3,7 +3,11 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useLoginMutation, useRegisterMutation } from "../services/auth"
+import {
+  useLoginMutation,
+  useRegisterMutation,
+  useSetTokenMutation,
+} from "../services/auth"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -17,6 +21,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
+import useAuth from "../hooks/useAuth"
 
 export const schema = z.object({
   name: z.string(),
@@ -25,20 +31,14 @@ export const schema = z.object({
 })
 
 export default function Register() {
-  const [register, result] = useRegisterMutation()
-  const { toast } = useToast()
+  const { register } = useAuth()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
   })
 
   async function handleSubmit(values: z.infer<typeof schema>) {
-    try {
-      const {jwt} = await register(values).unwrap()
-    } catch (err: any) {
-      const message = err?.data?.message
-      toast({ title: message, variant:"error" })
-    }
+    register(values)
   }
 
   return (

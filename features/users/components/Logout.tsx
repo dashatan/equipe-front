@@ -1,13 +1,10 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { useRouter } from "next/navigation"
+import useAuth from "../hooks/useAuth"
 
 export default function Logout() {
-  const router = useRouter()
-  async function handleLogout() {
-    await fetch("/api/auth", { method: "DELETE" }).then(() => {
-      router.push("/login")
-    })
-  }
-  return <Button onClick={handleLogout}>LogOut</Button>
+  const { logout } = useAuth()
+
+  return <Button onClick={logout}>LogOut</Button>
 }

@@ -4,3 +4,9 @@ export const mainApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000" }),
   endpoints: () => ({}),
 })
+
+export const localApi = createApi({
+  reducerPath: "local",
+  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3080/api/" }),
+  endpoints: () => ({}),
+})
