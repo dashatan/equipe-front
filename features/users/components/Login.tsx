@@ -31,7 +31,7 @@ export const schema = z.object({
 })
 
 export default function Login() {
-  const { login, loginRes } = useAuth()
+  const { login, loginRes, setTokenRes } = useAuth()
 
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
@@ -40,6 +40,8 @@ export default function Login() {
   async function handleSubmit(values: z.infer<typeof schema>) {
     login(values)
   }
+
+  const loading = loginRes.isLoading || setTokenRes.isLoading
 
   return (
     <Card className="pt-4 w-full">
@@ -65,11 +67,7 @@ export default function Login() {
           </CardContent>
           <CardFooter>
             <Button className="w-full" variant="destructive" type="submit">
-              {loginRes.isLoading ? (
-                <Icons.spinner className="animate-spin" />
-              ) : (
-                <span>Submit</span>
-              )}
+              {loading ? <Icons.spinner className="animate-spin" /> : <span>Submit</span>}
             </Button>
           </CardFooter>
         </form>
