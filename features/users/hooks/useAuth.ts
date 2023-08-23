@@ -23,7 +23,7 @@ export default function useAuth() {
       const { jwt } = await Login(values).unwrap()
       await setToken({ token: jwt }).then(() => {
         dispatch(authSlice.actions.token(jwt))
-        router.push("/profile")
+        router.push("/")
       })
     } catch (err: any) {
       console.log(err)
@@ -36,7 +36,7 @@ export default function useAuth() {
       const { jwt } = await Register(values).unwrap()
       await setToken({ token: jwt }).then(() => {
         dispatch(authSlice.actions.token(jwt))
-        router.push("/profile")
+        router.push("/")
       })
     } catch (err: any) {
       console.log(err)
@@ -47,7 +47,7 @@ export default function useAuth() {
   async function logout() {
     try {
       await deleteToken()
-      router.push("/login")
+      router.push("/auth")
     } catch (err: any) {
       console.log(err)
       const message = err?.data?.message

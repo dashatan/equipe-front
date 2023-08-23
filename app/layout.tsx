@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{direction:"rtl"}}>
+      <body className={inter.className} style={{direction:"ltr"}}>
         <Providers>{children}</Providers>
         <Toaster/>
       </body>
