@@ -7,7 +7,7 @@ import {
   useLoginMutation,
   useRegisterMutation,
   useSetTokenMutation,
-} from "../services/auth"
+} from "../services/auth.service"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"

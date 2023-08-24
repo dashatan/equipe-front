@@ -4,7 +4,7 @@ import {
   useLoginMutation,
   useRegisterMutation,
   useSetTokenMutation,
-} from "../services/auth"
+} from "../services/auth.service"
 import { useRouter } from "next/navigation"
 import { useAppDispatch } from "@/store/store"
 import { authSlice } from "../slices/auth"

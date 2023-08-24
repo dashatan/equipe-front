@@ -3,25 +3,17 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { useLoginMutation, useSetTokenMutation } from "../services/auth"
 import * as z from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { useToast } from "@/components/ui/use-toast"
-import { useAppDispatch, useAppSelector } from "@/store/store"
-import { authSlice } from "../slices/auth"
-import { SearchSlice } from "@/store/slices"
-import { useRouter } from "next/navigation"
-import { cookies } from "next/headers"
 import useAuth from "../hooks/useAuth"
 import { Icons } from "@/components/ui/Icons"
 
@@ -44,7 +36,7 @@ export default function Login() {
   const loading = loginRes.isLoading || setTokenRes.isLoading
 
   return (
-    <Card className="pt-4 w-full">
+    <Card className="w-full pt-4">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <CardContent className="flex flex-col gap-4 py-4">

@@ -5,8 +5,8 @@ export const usersApi = mainApi.injectEndpoints({
     getUsers: builder.query<User, undefined>({
       query: () => "users",
     }),
-    getUser: builder.query<User, { id?: string; token?: string }>({
-      query: ({ id, token }) => `users/${id}/${token}`,
+    getUser: builder.query<User, string | void>({
+      query: (id) => `users/${id}`,
     }),
     updateUser: builder.mutation<User, Partial<User>>({
       query: (body) => ({ url: "users", method: "PUT", body }),

@@ -7,8 +7,8 @@ export const menuItems = [
     icon: Home,
   },
   {
-    name: "groups",
-    url: "/groups",
+    name: "equipes",
+    url: "/equipes",
     icon: Users,
   },
   {

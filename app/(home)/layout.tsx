@@ -1,4 +1,4 @@
-import Sidebar from "@/features/home/components/sidebar/Sidebar"
+import Sidebar from "@/features/sidebar/Sidebar"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
