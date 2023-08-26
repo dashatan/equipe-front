@@ -17,6 +17,14 @@ import { Loader2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import ImageField from "@/features/form/components/ImageField"
+import { Slider } from "@/components/ui/slider"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 
 export default function EquipeForm() {
   const [createEquip, { isLoading }] = useCreateEquipeMutation()
@@ -107,6 +115,71 @@ export default function EquipeForm() {
                 )
               }}
             />
+            <FormField
+              name="age"
+              control={equipeForm.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Age Range</FormLabel>
+                    <FormControl>
+                      <Slider
+                        defaultValue={field.value || [18, 40]}
+                        step={1}
+                        min={1}
+                        max={100}
+                        onValueChange={(value) => field.onChange(value)}
+                        className="!mt-4"
+                        withPreview
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <FormField
+              name="city"
+              control={equipeForm.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>City</FormLabel>
+                    <Select
+                      onValueChange={(value) => field.onChange(value)}
+                      defaultValue={field.value}
+                    >
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="choose a city" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="tehran">Tehran</SelectItem>
+                        <SelectItem value="tabriz">Tabriz</SelectItem>
+                        <SelectItem value="esfahan">Esfahan</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            
+            <FormField
+              name="categories"
+              control={equipeForm.control}
+              render={({ field }) => {
+                return (
+                  <FormItem>
+                    <FormLabel>Categories</FormLabel>
+                      
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+
           </div>
         </form>
       </Form>

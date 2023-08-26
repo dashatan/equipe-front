@@ -2,11 +2,11 @@ import * as z from "zod"
 
 export const createEquipeSchema = z.object({
   name: z.string(),
-  description: z.string(),
-  age: z.number().array(),
+  description: z.string().optional(),
+  age: z.number().array().optional(),
   categories: z.string().array(),
-  city: z.string(),
-  images: z.string(),
+  city: z.string().optional(),
+  images: z.string().optional(),
 })
 
 export type CreateEquipeSchemaType = z.infer<typeof createEquipeSchema>

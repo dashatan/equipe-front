@@ -46,8 +46,10 @@ export default function useAuth() {
   }
   async function logout() {
     try {
-      await deleteToken()
-      router.push("/auth")
+      await deleteToken().then(() => {
+        dispatch(authSlice.actions.token(undefined))
+        router.push("/auth")
+      })
     } catch (err: any) {
       console.log(err)
       const message = err?.data?.message
