@@ -1,5 +1,7 @@
 import { Providers } from "@/store/Provider"
 import "./globals.css"
+import "primereact/resources/primereact.min.css"
+import "primereact/resources/themes/lara-light-teal/theme.css"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import { Toaster } from "@/components/ui/toaster"

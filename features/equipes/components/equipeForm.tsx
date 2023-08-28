@@ -9,22 +9,17 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { CreateEquipeSchemaType, createEquipeSchema } from "../schemas/createEquipeSchema"
-import { Input, Textarea } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { useCreateEquipeMutation } from "../services/equipes.service"
 import { useToast } from "@/components/ui/use-toast"
-import { Loader2 } from "lucide-react"
+import { Loader2, Users, Users2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import ImageField from "@/features/form/components/ImageField"
 import { Slider } from "@/components/ui/slider"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { MultiSelect } from "primereact/multiselect"
+import Select from "@/features/form/components/selectField/select"
+import InputText, { InputTextarea } from "@/features/form/components/textField/inputText"
+import Button from "@/features/form/components/button/Button"
 
 export default function EquipeForm() {
   const [createEquip, { isLoading }] = useCreateEquipeMutation()
@@ -35,6 +30,8 @@ export default function EquipeForm() {
   })
 
   async function handleSubmit(values: CreateEquipeSchemaType) {
+    console.log(values)
+
     try {
       const res = await createEquip(values).unwrap()
       console.log(res)
@@ -49,9 +46,9 @@ export default function EquipeForm() {
       <Form {...equipeForm}>
         <form
           onSubmit={equipeForm.handleSubmit(handleSubmit)}
-          className="flex flex-col w-full md:gap-10 md:grid md:grid-cols-2 "
+          className="flex flex-col w-full "
         >
-          <div className="md:max-w-lg">
+          <div className="flex flex-col relative gap-10 md:max-w-lg">
             <FormField
               name="images"
               control={equipeForm.control}
@@ -60,7 +57,7 @@ export default function EquipeForm() {
                   <FormItem>
                     <ImageField
                       label="Image"
-                      maxFiles={1}
+                      maxFiles={10}
                       maxSize={10}
                       minDimension={[600, 400]}
                       name="file"
@@ -75,25 +72,15 @@ export default function EquipeForm() {
                 )
               }}
             />
-
-            <Button variant={"destructive"} type="submit" className="my-6 ">
-              {isLoading ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <span> Create Equipe</span>
-              )}
-            </Button>
-          </div>
-          <div className="flex flex-col gap-10 md:max-w-lg">
             <FormField
               name="name"
               control={equipeForm.control}
               render={({ field }) => {
                 return (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <InputText {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -105,10 +92,10 @@ export default function EquipeForm() {
               control={equipeForm.control}
               render={({ field }) => {
                 return (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea {...field} className="h-40" />
+                      <InputTextarea {...field} className="h-20" />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -143,43 +130,63 @@ export default function EquipeForm() {
               control={equipeForm.control}
               render={({ field }) => {
                 return (
-                  <FormItem>
+                  <FormItem className="flex flex-col">
                     <FormLabel>City</FormLabel>
                     <Select
-                      onValueChange={(value) => field.onChange(value)}
-                      defaultValue={field.value}
-                    >
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="choose a city" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="tehran">Tehran</SelectItem>
-                        <SelectItem value="tabriz">Tabriz</SelectItem>
-                        <SelectItem value="esfahan">Esfahan</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )
-              }}
-            />
-            
-            <FormField
-              name="categories"
-              control={equipeForm.control}
-              render={({ field }) => {
-                return (
-                  <FormItem>
-                    <FormLabel>Categories</FormLabel>
-                      
+                      id={field.name}
+                      onChange={(e) => field.onChange(e.value)}
+                      value={field.value}
+                      filter
+                      options={[
+                        { label: "tabriz", value: "tabriz" },
+                        { label: "tehran", value: "tehran" },
+                        { label: "esfahan", value: "esfahan" },
+                        { label: "shiraz", value: "shiraz" },
+                        { label: "gilan", value: "gilan" },
+                      ]}
+                    />
                     <FormMessage />
                   </FormItem>
                 )
               }}
             />
 
+            <FormField
+              name="categories"
+              control={equipeForm.control}
+              render={({ field }) => {
+                return (
+                  <FormItem className="flex flex-col">
+                    <FormLabel>Categories</FormLabel>
+                    <MultiSelect
+                      onChange={(e) => field.onChange(e.value)}
+                      id={field.name}
+                      value={field.value}
+                      display="chip"
+                      filter
+                      options={[
+                        { label: "friendship", value: "friendship" },
+                        { label: "sports", value: "sports" },
+                        { label: "conversation", value: "conversation" },
+                        { label: "work", value: "work" },
+                      ]}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )
+              }}
+            />
+            <div className="sticky bottom-0 left-0  bg-white">
+              <Button
+                type="submit"
+                className="my-6 w-full"
+                rounded
+                outlined
+                label="Create Equipe"
+                icon={<Users2 />}
+                loading={isLoading}
+              ></Button>
+            </div>
           </div>
         </form>
       </Form>
