@@ -14,12 +14,12 @@ import { useToast } from "@/components/ui/use-toast"
 import { Loader2, Users, Users2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import ImageField from "@/features/form/components/ImageField"
 import { Slider } from "@/components/ui/slider"
 import { MultiSelect } from "primereact/multiselect"
 import Select from "@/features/form/components/selectField/select"
 import InputText, { InputTextarea } from "@/features/form/components/textField/inputText"
 import Button from "@/features/form/components/button/Button"
+import ImageField from "@/features/form/components/ImageField/ImageField"
 
 export default function EquipeForm() {
   const [createEquip, { isLoading }] = useCreateEquipeMutation()
@@ -30,10 +30,12 @@ export default function EquipeForm() {
   })
 
   async function handleSubmit(values: CreateEquipeSchemaType) {
-    console.log(values)
-
+    const fd = new FormData()
+    for (const val in values) {
+      fd.append(val, (values as any)[val])
+    }
     try {
-      const res = await createEquip(values).unwrap()
+      const res = await createEquip(fd).unwrap()
       console.log(res)
     } catch (error: any) {
       console.log(error)
@@ -55,7 +57,7 @@ export default function EquipeForm() {
               render={({ field }) => {
                 return (
                   <FormItem>
-                    <ImageField
+                    {/* <ImageField
                       label="Image"
                       maxFiles={10}
                       maxSize={10}
@@ -66,6 +68,11 @@ export default function EquipeForm() {
                         field.onChange(value)
                         console.log(key, value)
                       }}
+                    /> */}
+                    <ImageField
+                      onChange={(e) =>
+                        field.onChange(e.target.files ? e.target.files[0] : undefined)
+                      }
                     />
                     <FormMessage />
                   </FormItem>

@@ -5,7 +5,6 @@ import {
   useRegisterMutation,
   useSetTokenMutation,
 } from "../services/auth.service"
-import { useRouter } from "next/navigation"
 import { useAppDispatch } from "@/store/store"
 import { authSlice } from "../slices/auth"
 
@@ -16,14 +15,14 @@ export default function useAuth() {
   const [deleteToken, deleteTokenRes] = useDeleteTokenMutation()
   const dispatch = useAppDispatch()
   const { toast } = useToast()
-  const router = useRouter()
 
   async function login(values: Partial<User>) {
     try {
       const { jwt } = await Login(values).unwrap()
       await setToken({ token: jwt }).then(() => {
         dispatch(authSlice.actions.token(jwt))
-        router.push("/")
+        toast({ title: "Login Success", className: "bg-green-200 text-green-600" })
+        window.location.href = "/"
       })
     } catch (err: any) {
       console.log(err)
@@ -36,7 +35,8 @@ export default function useAuth() {
       const { jwt } = await Register(values).unwrap()
       await setToken({ token: jwt }).then(() => {
         dispatch(authSlice.actions.token(jwt))
-        router.push("/")
+        toast({ title: "Register Success", className: "bg-green-200 text-green-600" })
+        window.location.href = "/"
       })
     } catch (err: any) {
       console.log(err)
@@ -48,7 +48,8 @@ export default function useAuth() {
     try {
       await deleteToken().then(() => {
         dispatch(authSlice.actions.token(undefined))
-        router.push("/auth")
+        toast({ title: "Logout Success", variant: "destructive" })
+        window.location.href = "/auth"
       })
     } catch (err: any) {
       console.log(err)

@@ -6,7 +6,6 @@ import { redirect } from "next/navigation"
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const authToken = cookies().get("authToken")?.value
   if (authToken) redirect("/profile")
-
   return (
     <div className="flex h-screen">
       <div className="w-full md:w-[500px] md:min-w-[500px] p-2 shadow-md flex flex-col gap-4">

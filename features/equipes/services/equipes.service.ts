@@ -6,8 +6,13 @@ export const equipesApi = mainApi.injectEndpoints({
     getEquipes: builder.query<Equipe[], void>({
       query: () => "equipes",
     }),
-    createEquipe: builder.mutation<Equipe, CreateEquipeSchemaType>({
-      query: (body) => ({ url: "equipes", method: "POST", body }),
+    createEquipe: builder.mutation<Equipe, FormData>({
+      query: (body) => ({
+        url: "equipes",
+        method: "POST",
+        body,
+        headers: { "Content-Type": "multipart/form-data" },
+      }),
     }),
   }),
 })

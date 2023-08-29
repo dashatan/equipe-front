@@ -6,7 +6,7 @@ export const createEquipeSchema = z.object({
   age: z.number().array().optional(),
   categories: z.string().array(),
   city: z.string().optional(),
-  images: z.string().optional(),
+  images: z.instanceof(File),
 })
 
 export type CreateEquipeSchemaType = z.infer<typeof createEquipeSchema>
